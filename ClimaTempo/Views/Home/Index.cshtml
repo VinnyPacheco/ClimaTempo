@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <div class="row" style="text-align:center">
+        <h1><b>Previsão do tempo</b></h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="card card-margin" style="margin:16px">
+            <img style="height: 150px; object-fit: cover; object-position: center; border-radius: 10px;" src="~/Images/banner_previsao.gif" />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-margin">
+                <div class="card-header no-border" style="background-color:orange;">
+                    <h4 class="card-title" style="text-align: center"><b>Cidades mais quentes hoje</b></h4>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="widget-49" style="padding:10px">
+                        @if (ViewBag.ClimaCidadesQuentes.Count == 0)
+                        {
+                            <label>Desculpe, não conseguimos carregar estas informações. :(</label>
+                        }
+                        else
+                        {
+                            foreach (var climacidade in (ViewBag.ClimaCidadesQuentes as IEnumerable<ClimaTempo.Models.PrevisaoClimaModel>))
+                            {
+                                <div class="row" style="min-height:50px;vertical-align:central">
+                                    <div class="col-md-6">
+                                        <label>@climacidade.Cidade.Nome - @climacidade.Cidade.Estado.UF</label>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <img src="@climacidade.ImagemClima()" style="height:30px;width:30px;align-self:center;margin-right:5px" /><label>Máx: @climacidade.TemperaturaMaxima C°</label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-margin">
+                <div class="card-header no-border" style="background-color:lightblue;">
+                    <h4 class="card-title" style="text-align: center"><b>Cidades mais frias hoje</b></h4>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="widget-49" style="padding: 10px">
+                        @if (ViewBag.ClimaCidadesFrias.Count == 0)
+                        {
+                            <label>Desculpe, não conseguimos carregar estas informações. :(</label>
+                        }
+                        else
+                        {
+                            foreach (var climacidade in (ViewBag.ClimaCidadesFrias as IEnumerable<ClimaTempo.Models.PrevisaoClimaModel>))
+                            {
+                                <div class="row" style="min-height:50px; vertical-align: central">
+                                    <div class="col-md-6">
+                                        <label style="min-height:100%">@climacidade.Cidade.Nome - @climacidade.Cidade.Estado.UF</label>
+                                    </div>
+
+                                    <div class="col-md-6" style="float:right">
+                                        <img src="@climacidade.ImagemClima()" style="height: 30px; width: 30px; align-self: center; margin-right: 5px" /><label>Máx: @climacidade.TemperaturaMaxima C°</label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="container">
+    <div class="row" style="margin:0">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            @Html.TextBox("NomeCidade", "", new { @style = "min-width:92%!important;font-size:19px", @placeholder = "Digite o nome da cidade para pesquisar" })
+            <input class="btn btn-default" type="submit" value="buscar" id="btnBuscarCidade" style="float:right;margin-right:0px!important" />
+        }
+    </div>
+</div>
+<br />
+<br />
+<div class="container">
+    @if (ViewBag.PrevisaoCidade.Count == 0)
+    {
+        <label>Desculpe, não conseguimos carregar estas informações. :(</label> 
+    }
+    else
+    {
+        <div class="row">
+    <p>
+        <label style="text-align:center;min-width:100%;font-size:24px">Clima para os próximos 7 dias para a cidade de @ViewBag.CidadePesquisada</label>
+    </p>
+    </div>
+        foreach (var climacidade in (ViewBag.PrevisaoCidade as IEnumerable<ClimaTempo.Models.PrevisaoClimaModel>))
+        {
+            <div class="card card-margin col-sm-2" style="width:12%;margin:0 10px 0 10px">
+                <label style="text-align:center">@climacidade.RetornaSemana() </label>
+                <img src="@climacidade.ImagemClima()" style="height:50px;width:50px;align-self:center" />
+                <label><b style="color: red; margin-right:5px; font-size:x-large">↑</b> @climacidade.TemperaturaMaxima °C</label>
+                <label><b style="color:blue; margin-right:5px; font-size:x-large">↓</b> @climacidade.TemperaturaMinima °C</label>
+            </div>
+        }
+    }
+</div>
