@@ -1,0 +1,6 @@
+Primeiro de tudo: execute o script de banco de dados que está neste github, pois contem um comando de UPDATE para atualizar as datas.
+
+Front-end não é o meu forte, mas me dediquei ao máximo no curto espaço de tempo. Espero que gostem :)
+
+
+Vinícius Pacheco
